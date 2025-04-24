@@ -1,24 +1,22 @@
-using Application.DTOs;
+﻿using Application.DTOs;
 using Application.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-	[ApiVersion("1.0")]
+	[ApiVersion("2.0")]
 	[Route("api/v{version:apiVersion}/[controller]")]
 	[ApiController]
-	public class ProductController : ControllerBase
+	public class ProductV2Controller : ControllerBase
 	{
 		private readonly IProductService _productService;
 
-		public ProductController(IProductService productService)
+		public ProductV2Controller(IProductService productService)
 		{
 			_productService = productService;
 		}
 
-		// GET: api/v1/Product
-		[Authorize]
+		// GET: api/v2/Product
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts()
 		{
@@ -26,15 +24,7 @@ namespace API.Controllers
 			return Ok(products);
 		}
 
-		// GET: api/v1/Product/withItemCount
-		[HttpGet("withItemCount")]
-		public async Task<ActionResult<IEnumerable<ProductWithItemCount>>> GetProductsWithItemCount()
-		{
-			var products = await _productService.GetProductsWithItemCountAsync();
-			return Ok(products);
-		}
-
-		// GET: api/v1/Product/{id}
+		// GET: api/v2/Product/{id}
 		[HttpGet("{id}")]
 		public async Task<ActionResult<ProductDto>> GetProduct(int id)
 		{
@@ -46,7 +36,7 @@ namespace API.Controllers
 			return Ok(product);
 		}
 
-		// POST: api/v1/Product
+		// POST: api/v2/Product
 		[HttpPost]
 		public async Task<ActionResult<ProductDto>> PostProduct(ProductDto productDto)
 		{
@@ -54,7 +44,7 @@ namespace API.Controllers
 			return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
 		}
 
-		// PUT: api/v1/Product/{id}
+		// PUT: api/v2/Product/{id}
 		[HttpPut("{id}")]
 		public async Task<IActionResult> PutProduct(int id, ProductDto productDto)
 		{
@@ -66,7 +56,7 @@ namespace API.Controllers
 			return NoContent();
 		}
 
-		// DELETE: api/v1/Product/{id}
+		// DELETE: api/v2/Product/{id}
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> DeleteProduct(int id)
 		{
@@ -75,5 +65,3 @@ namespace API.Controllers
 		}
 	}
 }
-// This code defines a ProductController class that handles HTTP requests related to the Product entity. It uses dependency injection to access the IProductService interface, which provides methods for CRUD operations on products. The controller includes actions for getting all products, getting a product by ID, creating a new product, updating an existing product, and deleting a product. Each action returns appropriate HTTP status codes and responses based on the outcome of the operation.
-// The controller is decorated with the [Route] and [ApiController] attributes to define the routing and behavior of the API.
